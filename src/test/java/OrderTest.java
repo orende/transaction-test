@@ -16,7 +16,7 @@ public class OrderTest {
     public void checkoutSuccessfully() throws Exception {
         Order order = new Order(Maps.newHashMap(ImmutableMap.of(BOOK.id, 1)));
         Payment payment = new Payment(Maps.newHashMap(ImmutableMap.of(CUSTOMER.id, 100)));
-        Checkout checkout = new Checkout(order, payment);
+        Checkout checkout = new Checkout(order, payment, eventQueue);
 
         assertThat(checkout.createOrder(BOOK, CUSTOMER)).isTrue();
     }
@@ -25,7 +25,7 @@ public class OrderTest {
     public void orderPlacementFailsPaymentShouldNotBeReduced() throws Exception {
         Order order = new Order(Maps.newHashMap(ImmutableMap.of(BOOK.id, 0)));
         Payment payment = new Payment(Maps.newHashMap(ImmutableMap.of(CUSTOMER.id, 100)));
-        Checkout checkout = new Checkout(order, payment);
+        Checkout checkout = new Checkout(order, payment, eventQueue);
 
         assertThat(checkout.createOrder(BOOK, CUSTOMER)).isFalse();
         assertThat(payment.getBalance(CUSTOMER.id)).isEqualTo(100);
